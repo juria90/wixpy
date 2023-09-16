@@ -432,7 +432,7 @@ class WixPfDir(WixElement):
     is_dir = True
 
     def __init__(self, data):
-        pid = (
+        pid = data.get("InstallDir") or (
             "ProgramFiles64Folder"
             if data.get("Win64") == "yes"
             else "ProgramFilesFolder"
