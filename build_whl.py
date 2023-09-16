@@ -21,12 +21,12 @@ import os
 import setuptools
 import sys
 
-sys.path.insert(1, os.path.abspath('./src'))
+sys.path.insert(1, os.path.abspath("./src"))
 
 import wixpy
 
-if 'bdist_wheel' not in sys.argv:
-    sys.argv.append('bdist_wheel')
+if "bdist_wheel" not in sys.argv:
+    sys.argv.append("bdist_wheel")
 
 with open("README.md", "r") as fp:
     long_description = fp.read()
@@ -39,11 +39,11 @@ setuptools.setup(
     description=wixpy.DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://wix.sk1project.net',
-    packages=['wixpy'],
-    package_dir={'wixpy': 'src/wixpy'},
+    url="https://wix.sk1project.net",
+    packages=["wixpy"],
+    package_dir={"wixpy": "src/wixpy"},
     classifiers=wixpy.CLASSIFIERS,
-    scripts=['scripts/wix.py'],
-    python_requires='>=2.7, <3',
-    keywords=' '.join(wixpy.KEYWORDS),
+    scripts=["scripts/wix.py"],
+    python_requires=">=2.7, <3",
+    keywords=" ".join(wixpy.KEYWORDS),
 )

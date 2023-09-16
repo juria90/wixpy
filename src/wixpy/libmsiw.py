@@ -65,9 +65,9 @@ class Table(object):
         self.tbl_spec = table_spec
 
     def _create_table(self, db):
-        fields = ['`%s` %s' % (name, tp) for name, tp in self.tbl_spec]
-        table_description = ', '.join(fields)
-        sql = 'CREATE TABLE `%s` (%s)' % (self.name, table_description)
+        fields = ["`%s` %s" % (name, tp) for name, tp in self.tbl_spec]
+        table_description = ", ".join(fields)
+        sql = "CREATE TABLE `%s` (%s)" % (self.name, table_description)
         db_view = db.OpenView(sql)
         db_view.Execute(None)
         db_view.Close()
@@ -76,28 +76,30 @@ class Table(object):
         return text
 
     def _write_records(self, db):
-        db_view = db.OpenView('SELECT * FROM `%s`' % self.name)
+        db_view = db.OpenView("SELECT * FROM `%s`" % self.name)
         count = db_view.GetColumnInfo(_msi.MSICOLINFO_NAMES).GetFieldCount()
         msirec = _msi.CreateRecord(count)
         for record in self.records:
             for i in range(count):
                 field = record[i]
-                if isinstance(field, (int, long)):
+                if isinstance(field, int):
                     msirec.SetInteger(i + 1, field)
-                elif isinstance(field, basestring):
+                elif isinstance(field, str):
                     msirec.SetString(i + 1, field)
                 elif field is None:
                     pass
-                elif isinstance(field, tuple) and field[0] == 'filepath':
+                elif isinstance(field, tuple) and field[0] == "filepath":
                     msirec.SetStream(i + 1, field[1])
                 else:
-                    msg = 'Incompatible type of record item: %s %s'
+                    msg = "Incompatible type of record item: %s %s"
                     raise ValueError(msg % (str(type(field)), str(field)))
             try:
                 db_view.Modify(_msi.MSIMODIFY_INSERT, msirec)
             except Exception as e:
-                raise Exception('Could not insert %s into %s: %s' %
-                                (repr(record), self.name, repr(e)))
+                raise Exception(
+                    "Could not insert %s into %s: %s"
+                    % (repr(record), self.name, repr(e))
+                )
             msirec.ClearData()
         db_view.Close()
 
@@ -115,8 +117,9 @@ class Database(object):
     def build_cabinet(self, cabfile, compressed=True, embed=True):
         _msi.FCICreate(cabfile, self.files)
         if embed:
-            self.tables['_Streams'].add(os.path.basename(cabfile),
-                                        ('filepath', cabfile))
+            self.tables["_Streams"].add(
+                os.path.basename(cabfile), ("filepath", cabfile)
+            )
 
     def init_db(self, msifile):
         self.db = _msi.OpenDatabase(msifile, _msi.MSIDBOPEN_CREATE)

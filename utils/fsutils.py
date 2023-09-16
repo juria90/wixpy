@@ -20,7 +20,7 @@
 import os
 
 
-def get_filenames(path='.', ext='*'):
+def get_filenames(path=".", ext="*"):
     """
     Returns filename list for provided path filtering by extension.
     """
@@ -35,18 +35,19 @@ def get_filenames(path='.', ext='*'):
         names.sort()
         for name in names:
             if not os.path.isdir(os.path.join(path, name)):
-                if ext == '*':
+                if ext == "*":
                     result.append(name)
-                elif name.endswith('.' + ext):
+                elif name.endswith("." + ext):
                     result.append(name)
     return result
 
 
-def get_filepaths(path='.', ext='*'):
+def get_filepaths(path=".", ext="*"):
     """
     Returns file path list for provided path filtering by extension.
     """
     import glob
+
     file_items = glob.glob(os.path.join(path, "*." + ext))
     file_items.sort()
     result = []
@@ -56,7 +57,7 @@ def get_filepaths(path='.', ext='*'):
     return result
 
 
-def get_dirpaths(path='.'):
+def get_dirpaths(path="."):
     """
     Return directory path list for provided path
     """
@@ -69,12 +70,12 @@ def get_dirpaths(path='.'):
             return names
     names.sort()
     for name in names:
-        if os.path.isdir(os.path.join(path, name)) and not name.startswith('.'):
+        if os.path.isdir(os.path.join(path, name)) and not name.startswith("."):
             result.append(os.path.join(path, name))
     return result
 
 
-def get_dirs_tree(path='.'):
+def get_dirs_tree(path="."):
     """
     Returns recursive directory path list for provided path
     """
@@ -86,12 +87,14 @@ def get_dirs_tree(path='.'):
     return res
 
 
-def get_files_tree(path='.', ext='*'):
+def get_files_tree(path=".", ext="*"):
     """
     Returns recursive file path list for provided path
     """
     tree = []
-    dirs = [path, ]
+    dirs = [
+        path,
+    ]
     dirs += get_dirs_tree(path)
     for dir_item in dirs:
         files = get_filepaths(dir_item, ext)
@@ -107,7 +110,7 @@ def clear_files(folder, ext=None):
     :param folder: target folder path
     :param ext: list or str
     """
-    ext = 'py' if ext is None else ext
+    ext = "py" if ext is None else ext
     exts = [ext] if not isinstance(ext, list) else ext
     for ext in exts:
         for path in get_files_tree(folder, ext):

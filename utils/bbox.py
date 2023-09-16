@@ -25,7 +25,7 @@ from .dist import SYSFACTS
 
 
 TIMESTAMP = datetime.datetime.now().strftime("%Y%m%d")
-STDOUT_ENDC = '\033[0m'
+STDOUT_ENDC = "\033[0m"
 
 
 class Error(Exception):
@@ -36,9 +36,9 @@ def command(exec_cmd):
     return os.system(exec_cmd)
 
 
-def echo_msg(msg, newline=True, flush=True, code=''):
+def echo_msg(msg, newline=True, flush=True, code=""):
     if newline:
-        msg += '\n'
+        msg += "\n"
     if code:
         msg = code + msg + STDOUT_ENDC
     sys.stdout.write(msg)
@@ -55,16 +55,16 @@ def get_marker(timestamp=True):
     mrk = SYSFACTS.marker
     if SYSFACTS.is_deb:
         if SYSFACTS.is_debian:
-            ver = ver.split('.')[0]
-        mrk = '_%s_%s_' % (SYSFACTS.marker, ver)
+            ver = ver.split(".")[0]
+        mrk = "_%s_%s_" % (SYSFACTS.marker, ver)
         if timestamp:
-            mrk = '_%s%s' % (TIMESTAMP, mrk)
+            mrk = "_%s%s" % (TIMESTAMP, mrk)
     elif SYSFACTS.is_rpm:
-        if not SYSFACTS.is_opensuse and not ver.startswith('42'):
-            ver = ver.split('.')[0]
+        if not SYSFACTS.is_opensuse and not ver.startswith("42"):
+            ver = ver.split(".")[0]
         mrk = SYSFACTS.marker + ver
         if timestamp:
-            mrk = '%s.%s' % (TIMESTAMP, mrk)
+            mrk = "%s.%s" % (TIMESTAMP, mrk)
     return mrk
 
 
@@ -76,15 +76,14 @@ def get_package_name(pth):
             files.append(fn)
     if SYSFACTS.is_deb:
         if len(files) == 1:
-            if files[0].endswith('.deb') or files[0].endswith('.tar.gz'):
+            if files[0].endswith(".deb") or files[0].endswith(".tar.gz"):
                 return files[0]
     elif SYSFACTS.is_rpm:
         for fn in files:
-            if fn.endswith('.rpm') and not fn.endswith('src.rpm') \
-                    and 'debug' not in fn:
+            if fn.endswith(".rpm") and not fn.endswith("src.rpm") and "debug" not in fn:
                 return fn
     elif SYSFACTS.is_msw:
         if len(files) == 1:
-            if files[0].endswith('.zip') or files[0].endswith('.msi'):
+            if files[0].endswith(".zip") or files[0].endswith(".msi"):
                 return files[0]
-    raise Error('Build failed! There is no build result.')
+    raise Error("Build failed! There is no build result.")

@@ -22,7 +22,7 @@ import platform
 import sys
 
 
-def get_size(start_path='.'):
+def get_size(start_path="."):
     total_size = 0
     for dirpath, dirnames, filenames in os.walk(start_path):
         for f in filenames:
@@ -31,30 +31,30 @@ def get_size(start_path='.'):
     return total_size
 
 
-RM_CODE = 'REMOVING'
-MK_CODE = 'CREATING'
-CP_CODE = 'COPYING '
-ER_CODE = 'ERROR'
-INFO_CODE = ''
+RM_CODE = "REMOVING"
+MK_CODE = "CREATING"
+CP_CODE = "COPYING "
+ER_CODE = "ERROR"
+INFO_CODE = ""
 
 
-def info(msg, code=''):
+def info(msg, code=""):
     if code == ER_CODE:
-        ret = '%s>>> %s' % (code, msg)
+        ret = "%s>>> %s" % (code, msg)
     elif not code:
         ret = msg
     else:
-        ret = '%s: %s' % (code, msg)
-    print ret
+        ret = "%s: %s" % (code, msg)
+    print(ret)
 
 
 def _make_dir(path):
     if not os.path.lexists(path):
-        info('%s directory.' % path, MK_CODE)
+        info("%s directory." % path, MK_CODE)
         try:
             os.makedirs(path)
         except:
-            raise IOError('Error while creating %s directory.' % path)
+            raise IOError("Error while creating %s directory." % path)
 
 
 def copy_scripts(folder, scripts):
@@ -62,15 +62,15 @@ def copy_scripts(folder, scripts):
         return
     _make_dir(folder)
     for item in scripts:
-        info('%s -> %s' % (item, folder), CP_CODE)
-        if os.system('cp %s %s' % (item, folder)):
-            raise IOError('Cannot copying %s -> %s' % (item, folder))
+        info("%s -> %s" % (item, folder), CP_CODE)
+        if os.system("cp %s %s" % (item, folder)):
+            raise IOError("Cannot copying %s -> %s" % (item, folder))
         filename = os.path.basename(item)
         path = os.path.join(folder, filename)
         if os.path.isfile(path):
-            info('%s as executable' % path, MK_CODE)
-            if os.system('chmod +x %s' % path):
-                raise IOError('Cannot set executable flag for %s' % path)
+            info("%s as executable" % path, MK_CODE)
+            if os.system("chmod +x %s" % path):
+                raise IOError("Cannot set executable flag for %s" % path)
 
 
 def copy_files(path, files):
@@ -79,12 +79,12 @@ def copy_files(path, files):
     if not files:
         return
     for item in files:
-        msg = '%s -> %s' % (item, path)
+        msg = "%s -> %s" % (item, path)
         if len(msg) > 80:
-            msg = '%s -> \n%s%s' % (item, ' ' * 10, path)
+            msg = "%s -> \n%s%s" % (item, " " * 10, path)
         info(msg, CP_CODE)
-        if os.system('cp %s %s' % (item, path)):
-            raise IOError('Cannot copying %s -> %s' % (item, path))
+        if os.system("cp %s %s" % (item, path)):
+            raise IOError("Cannot copying %s -> %s" % (item, path))
 
 
 class DebBuilder:
@@ -119,49 +119,49 @@ class DebBuilder:
     data_files = []
     deb_scripts = []
 
-    package = ''
+    package = ""
     version = None
-    arch = ''
-    maintainer = ''
+    arch = ""
+    maintainer = ""
     installed_size = 0
-    depends = ''
-    section = 'python'
-    priority = 'optional'
-    homepage = ''
-    description = ''
-    long_description = ''
+    depends = ""
+    section = "python"
+    priority = "optional"
+    homepage = ""
+    description = ""
+    long_description = ""
 
-    package_name = ''
-    py_version = ''
-    machine = ''
-    build_dir = 'build/deb-root'
-    deb_dir = 'build/deb-root/DEBIAN'
-    src = ''
-    dst = ''
-    bin_dir = ''
-    pixmaps_dir = ''
-    apps_dir = ''
+    package_name = ""
+    py_version = ""
+    machine = ""
+    build_dir = "build/deb-root"
+    deb_dir = "build/deb-root/DEBIAN"
+    src = ""
+    dst = ""
+    bin_dir = ""
+    pixmaps_dir = ""
+    apps_dir = ""
 
     def __init__(
-            self,
-            name='',
-            version='',
-            arch='',
-            dist='',
-            maintainer='',
-            depends='',
-            section='',
-            priority='',
-            homepage='',
-            description='',
-            long_description='',
-            package_dirs=None,
-            package_data=None,
-            scripts=None,
-            data_files=None,
-            deb_scripts=None,
-            dst=''):
-
+        self,
+        name="",
+        version="",
+        arch="",
+        dist="",
+        maintainer="",
+        depends="",
+        section="",
+        priority="",
+        homepage="",
+        description="",
+        long_description="",
+        package_dirs=None,
+        package_data=None,
+        scripts=None,
+        data_files=None,
+        deb_scripts=None,
+        dst="",
+    ):
         deb_scripts = deb_scripts or []
         data_files = data_files or []
         scripts = scripts or []
@@ -190,80 +190,81 @@ class DebBuilder:
         if dst:
             self.dst = dst
 
-        self.package = 'python-%s' % self.name
-        self.py_version = '.'.join(sys.version.split()[0].split('.')[:2])
+        self.package = "python-%s" % self.name
+        self.py_version = ".".join(sys.version.split()[0].split(".")[:2])
 
         if not self.arch:
             arch = platform.architecture()[0]
-            self.arch = 'amd64' if arch == '64bit' else 'i386'
+            self.arch = "amd64" if arch == "64bit" else "i386"
 
         self.machine = platform.machine()
 
-        self.src = 'build/lib.linux-%s-%s' % (self.machine, self.py_version)
+        self.src = "build/lib.linux-%s-%s" % (self.machine, self.py_version)
 
         if not self.dst:
-            path = '%s/usr/lib/python%s/dist-packages'
+            path = "%s/usr/lib/python%s/dist-packages"
             self.dst = path % (self.build_dir, self.py_version)
         else:
             self.dst = self.build_dir + self.dst
-        self.bin_dir = '%s/usr/bin' % self.build_dir
+        self.bin_dir = "%s/usr/bin" % self.build_dir
 
-        self.package_name = 'python-%s-%s%s_%s.deb' % (
-            self.name, self.version, self.dist, self.arch)
+        self.package_name = "python-%s-%s%s_%s.deb" % (
+            self.name,
+            self.version,
+            self.dist,
+            self.arch,
+        )
         self.build()
 
     def clear_build(self):
         if os.path.lexists(self.build_dir):
-            info('%s directory.' % self.build_dir, RM_CODE)
-            if os.system('rm -rf ' + self.build_dir):
-                raise IOError(
-                    'Error while removing %s directory.' % self.build_dir)
-        if not os.path.exists('dist'):
-            _make_dir('dist')
+            info("%s directory." % self.build_dir, RM_CODE)
+            if os.system("rm -rf " + self.build_dir):
+                raise IOError("Error while removing %s directory." % self.build_dir)
+        if not os.path.exists("dist"):
+            _make_dir("dist")
 
     def write_control(self):
         _make_dir(self.deb_dir)
         control_list = [
-            ['Package', self.package],
-            ['Version', self.version],
-            ['Architecture', self.arch],
-            ['Maintainer', self.maintainer],
-            ['Installed-Size', self.installed_size],
-            ['Depends', self.depends],
-            ['Section', self.section],
-            ['Priority', self.priority],
-            ['Homepage', self.homepage],
-            ['Description', self.description],
-            ['', self.long_description],
+            ["Package", self.package],
+            ["Version", self.version],
+            ["Architecture", self.arch],
+            ["Maintainer", self.maintainer],
+            ["Installed-Size", self.installed_size],
+            ["Depends", self.depends],
+            ["Section", self.section],
+            ["Priority", self.priority],
+            ["Homepage", self.homepage],
+            ["Description", self.description],
+            ["", self.long_description],
         ]
-        path = os.path.join(self.deb_dir, 'control')
-        info('Writing Debian control file.', MK_CODE)
+        path = os.path.join(self.deb_dir, "control")
+        info("Writing Debian control file.", MK_CODE)
         try:
-            control = open(path, 'w')
+            control = open(path, "w")
             for item in control_list:
                 name, val = item
                 if val:
                     if name:
-                        control.write('%s: %s\n' % (name, val))
+                        control.write("%s: %s\n" % (name, val))
                     else:
-                        control.write('%s\n' % val)
+                        control.write("%s\n" % val)
             control.close()
         except:
-            raise IOError('Error while writing Debian control file.')
+            raise IOError("Error while writing Debian control file.")
 
     def copy_build(self):
         for item in os.listdir(self.src):
             path = os.path.join(self.src, item)
             if os.path.isdir(path):
-                info('%s -> %s' % (path, self.dst), CP_CODE)
-                if os.system('cp -R %s %s' % (path, self.dst)):
-                    raise IOError(
-                        'Error while copying %s -> %s' % (path, self.dst))
+                info("%s -> %s" % (path, self.dst), CP_CODE)
+                if os.system("cp -R %s %s" % (path, self.dst)):
+                    raise IOError("Error while copying %s -> %s" % (path, self.dst))
             elif os.path.isfile(path):
-                info('%s -> %s' % (path, self.dst), CP_CODE)
-                if os.system('cp %s %s' % (path, self.dst)):
-                    raise IOError(
-                        'Error while copying %s -> %s' % (path, self.dst))
+                info("%s -> %s" % (path, self.dst), CP_CODE)
+                if os.system("cp %s %s" % (path, self.dst)):
+                    raise IOError("Error while copying %s -> %s" % (path, self.dst))
 
     def copy_data_files(self):
         for item in self.data_files:
@@ -272,12 +273,12 @@ class DebBuilder:
 
     def copy_package_data_files(self):
         files = []
-        pkgs = self.package_data.keys()
+        pkgs = list(self.package_data.keys())
         for pkg in pkgs:
             items = self.package_data[pkg]
             for item in items:
                 path = os.path.join(self.package_dirs[pkg], item)
-                if os.path.basename(path) == '*.*':
+                if os.path.basename(path) == "*.*":
                     flist = []
                     folder = os.path.join(self.dst, os.path.dirname(item))
                     fldir = os.path.dirname(path)
@@ -290,25 +291,34 @@ class DebBuilder:
                 else:
                     if os.path.isfile(path):
                         folder = os.path.join(self.dst, os.path.dirname(item))
-                        files.append([folder, [path, ]])
+                        files.append(
+                            [
+                                folder,
+                                [
+                                    path,
+                                ],
+                            ]
+                        )
         for item in files:
             path, files = item
             copy_files(path, files)
 
     def make_package(self):
-        os.system('chmod -R 755 %s' % self.build_dir)
-        info('%s package.' % self.package_name, MK_CODE)
-        if os.system('sudo dpkg --build %s/ dist/%s' % (
-                self.build_dir, self.package_name)):
-            raise IOError('Cannot create package %s' % self.package_name)
+        os.system("chmod -R 755 %s" % self.build_dir)
+        info("%s package." % self.package_name, MK_CODE)
+        if os.system(
+            "sudo dpkg --build %s/ dist/%s" % (self.build_dir, self.package_name)
+        ):
+            raise IOError("Cannot create package %s" % self.package_name)
 
     def build(self):
-        line = '=' * 30
-        info(line + '\n' + 'DEB PACKAGE BUILD' + '\n' + line)
+        line = "=" * 30
+        info(line + "\n" + "DEB PACKAGE BUILD" + "\n" + line)
         try:
-            if not os.path.isdir('build'):
-                raise IOError('There is no project build! '
-                              'Run "setup.py build" and try again.')
+            if not os.path.isdir("build"):
+                raise IOError(
+                    "There is no project build! " 'Run "setup.py build" and try again.'
+                )
             self.clear_build()
             _make_dir(self.dst)
             self.copy_build()
@@ -320,7 +330,7 @@ class DebBuilder:
             self.make_package()
         except IOError as e:
             info(e, ER_CODE)
-            info(line + '\n' + 'BUILD FAILED!')
+            info(line + "\n" + "BUILD FAILED!")
             return 1
-        info(line + '\n' + 'BUILD SUCCESSFUL!')
+        info(line + "\n" + "BUILD SUCCESSFUL!")
         return 0

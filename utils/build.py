@@ -33,7 +33,7 @@ def get_resources(pkg_path, path):
     dirs.append(path)
     res_dirs = []
     for item in dirs:
-        res_dirs.append(os.path.join(item[size:], '*.*'))
+        res_dirs.append(os.path.join(item[size:], "*.*"))
     return res_dirs
 
 
@@ -41,15 +41,15 @@ def clear_build():
     """
     Clears build result.
     """
-    if os.path.exists('build'):
-        os.system('rm -rf build')
+    if os.path.exists("build"):
+        os.system("rm -rf build")
 
 
 def clear_msw_build():
     """
     Clears build result on MS Windows.
     """
-    shutil.rmtree('build', True)
+    shutil.rmtree("build", True)
 
 
 def make_source_list(path, file_list=None):
@@ -64,7 +64,7 @@ def make_source_list(path, file_list=None):
     return ret
 
 
-INIT_FILE = '__init__.py'
+INIT_FILE = "__init__.py"
 
 
 def is_package(path):
@@ -90,7 +90,7 @@ def get_packages(path):
         except os.error:
             pass
         for item in items:
-            if item.startswith('.'):
+            if item.startswith("."):
                 continue
             folder = os.path.join(path, item)
             if is_package(folder):
@@ -100,7 +100,7 @@ def get_packages(path):
     return packages
 
 
-def get_package_dirs(path='src', excludes=None):
+def get_package_dirs(path="src", excludes=None):
     """
     Collects root packages.
     """
@@ -116,7 +116,7 @@ def get_package_dirs(path='src', excludes=None):
         for item in items:
             if item in excludes:
                 continue
-            if item == '.svn':
+            if item == ".svn":
                 continue
             folder = os.path.join(path, item)
             if is_package(folder):
@@ -124,7 +124,7 @@ def get_package_dirs(path='src', excludes=None):
     return dirs
 
 
-def get_source_structure(path='src', excludes=None):
+def get_source_structure(path="src", excludes=None):
     """
     Returns recursive list of python packages.
     """
@@ -132,10 +132,10 @@ def get_source_structure(path='src', excludes=None):
         excludes = []
     pkgs = []
     for item in get_packages(path):
-        res = item.replace('\\', '.').replace('/', '.').split('src.')[1]
+        res = item.replace("\\", ".").replace("/", ".").split("src.")[1]
         check = True
         for exclude in excludes:
-            if len(res) >= len(exclude) and res[:len(exclude)] == exclude:
+            if len(res) >= len(exclude) and res[: len(exclude)] == exclude:
                 check = False
                 break
         if check:
@@ -143,44 +143,44 @@ def get_source_structure(path='src', excludes=None):
     return pkgs
 
 
-def compile_sources(folder='build'):
+def compile_sources(folder="build"):
     """
     Compiles python sources in build/ directory.
     """
     import compileall
+
     compileall.compile_dir(folder, quiet=1)
 
 
-def copy_modules(modules, src_root='src'):
+def copy_modules(modules, src_root="src"):
     """
     Copies native modules into src/
     The routine implements build_update command
     functionality and executed after "setup.py build" command.
     """
-    version = '.'.join(sys.version.split()[0].split('.')[:2])
+    version = ".".join(sys.version.split()[0].split(".")[:2])
     machine = platform.machine()
-    ext = '.so'
-    prefix = 'build/lib.linux-' + machine + '-' + version
-    marker = ''
+    ext = ".so"
+    prefix = "build/lib.linux-" + machine + "-" + version
+    marker = ""
 
-    if os.name == 'nt' and platform.architecture()[0] == '32bit':
-        prefix = 'build/lib.win32-' + version
-        ext = '.pyd'
-        marker = 'win32'
-    elif os.name == 'nt' and platform.architecture()[0] == '64bit':
-        prefix = 'build/lib.win-amd64-' + version
-        ext = '.pyd'
-        marker = 'win64'
+    if os.name == "nt" and platform.architecture()[0] == "32bit":
+        prefix = "build/lib.win32-" + version
+        ext = ".pyd"
+        marker = "win32"
+    elif os.name == "nt" and platform.architecture()[0] == "64bit":
+        prefix = "build/lib.win-amd64-" + version
+        ext = ".pyd"
+        marker = "win64"
 
     for item in modules:
-        path = os.path.join(*item.name.split('.')) + ext
+        path = os.path.join(*item.name.split(".")) + ext
         src = os.path.join(prefix, path)
         dst = os.path.join(src_root, path)
         shutil.copy(src, dst)
-        if os.name == 'nt':
-            dst2 = os.path.join('%s-devres' % marker, 'pyd',
-                                os.path.basename(src))
+        if os.name == "nt":
+            dst2 = os.path.join("%s-devres" % marker, "pyd", os.path.basename(src))
             if os.path.exists(dst2):
                 os.remove(dst2)
             shutil.copy(src, dst)
-        print('>>>Module %s has been copied to src/ directory' % path)
+        print((">>>Module %s has been copied to src/ directory" % path))

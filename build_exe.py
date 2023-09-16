@@ -19,24 +19,27 @@
 
 import sys
 
-sys.path.insert(0, 'src')
+sys.path.insert(0, "src")
 
 from distutils.core import setup
 import py2exe
 import wixpy
 
-sys.argv += ['py2exe', ]
-INCLUDES = ['os', 'sys']
+sys.argv += [
+    "py2exe",
+]
+INCLUDES = ["os", "sys"]
 SCRIPT = "scripts\\py2\\wix.py"
 
 setup(
-    options={'py2exe': {'bundle_files': 3,
-                        'compressed': True,
-                        'includes': INCLUDES,
-    }},
-    console=[{'script': SCRIPT,
-              'icon_resources': [(0, 'resources\\wixpy.ico')]
-    }],
+    options={
+        "py2exe": {
+            "bundle_files": 3,
+            "compressed": True,
+            "includes": INCLUDES,
+        }
+    },
+    console=[{"script": SCRIPT, "icon_resources": [(0, "resources\\wixpy.ico")]}],
     zipfile=None,
     name=wixpy.PROJECT,
     version=wixpy.VERSION,

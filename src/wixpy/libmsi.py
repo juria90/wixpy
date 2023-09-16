@@ -20,8 +20,8 @@
 import gi
 import os
 
-gi.require_version('Libmsi', '1.0')
-gi.require_version('GCab', '1.0')
+gi.require_version("Libmsi", "1.0")
+gi.require_version("GCab", "1.0")
 
 from gi.repository import Libmsi
 from gi.repository import GCab
@@ -61,12 +61,12 @@ class SummaryInfo(object):
             (Libmsi.Property.VERSION, self.version),
             (Libmsi.Property.APPNAME, self.appname),
             (Libmsi.Property.SECURITY, self.security),
-            (Libmsi.Property.SOURCE, self.source), ]
+            (Libmsi.Property.SOURCE, self.source),
+        ]
 
         msi_prop = Libmsi.SummaryInfo.new(None, MAXINT)
         for prop, value in properties:
-            if prop in [Libmsi.Property.CREATED_TM,
-                        Libmsi.Property.LASTSAVED_TM]:
+            if prop in [Libmsi.Property.CREATED_TM, Libmsi.Property.LASTSAVED_TM]:
                 msi_prop.set_filetime(prop, value)
             elif isinstance(value, int):
                 msi_prop.set_int(prop, value)
@@ -87,10 +87,9 @@ class Table(object):
         self.tbl_spec = table_spec
 
     def _create_table(self, db):
-        fields = ['`%s` %s' % (name, tp)
-                  for name, tp in self.tbl_spec]
-        table_description = ', '.join(fields)
-        sql = 'CREATE TABLE `%s` (%s)' % (self.name, table_description)
+        fields = ["`%s` %s" % (name, tp) for name, tp in self.tbl_spec]
+        table_description = ", ".join(fields)
+        sql = "CREATE TABLE `%s` (%s)" % (self.name, table_description)
         Libmsi.Query.new(db, sql).execute()
 
     def _normalize_str(self, text):
@@ -103,12 +102,15 @@ class Table(object):
             values = []
             for item in record:
                 if item is not None:
-                    fields.append('`%s`' % self.tbl_spec[idx][0])
-                    values.append('?')
+                    fields.append("`%s`" % self.tbl_spec[idx][0])
+                    values.append("?")
                 idx += 1
 
-            sql = 'INSERT INTO `%s` (%s) VALUES (%s)' % \
-                  (self.name, ', '.join(fields), ', '.join(values))
+            sql = "INSERT INTO `%s` (%s) VALUES (%s)" % (
+                self.name,
+                ", ".join(fields),
+                ", ".join(values),
+            )
             query = Libmsi.Query.new(db, sql)
 
             msirec = Libmsi.Record.new(len(fields))
@@ -120,10 +122,10 @@ class Table(object):
                     index -= 1
                 elif isinstance(item, str):
                     msirec.set_string(index, self._normalize_str(item))
-                elif isinstance(item, tuple) and item[0] == 'filepath':
+                elif isinstance(item, tuple) and item[0] == "filepath":
                     msirec.load_stream(index, item[1])
                 else:
-                    msg = 'Incompatible type of record item: %s %s'
+                    msg = "Incompatible type of record item: %s %s"
                     raise ValueError(msg % (str(type(item)), str(item)))
                 index += 1
             query.execute(msirec)
@@ -140,18 +142,21 @@ class Database(object):
         self.tables = None
 
     def build_cabinet(self, cabfile, compressed=True, embed=True):
-        folder = GCab.Folder.new(GCab.Compression.MSZIP if compressed
-                                 else GCab.Compression.NONE)
+        folder = GCab.Folder.new(
+            GCab.Compression.MSZIP if compressed else GCab.Compression.NONE
+        )
         for filepath, file_id in self.files:
             gpointer = Gio.File.new_for_path(filepath)
             folder.add_file(GCab.File.new_with_file(file_id, gpointer), False)
         cab = GCab.Cabinet.new()
         cab.add_folder(folder)
-        cab.write(Gio.File.new_for_path(cabfile).replace('', False, 0, None),
-                  None, None, None)
+        cab.write(
+            Gio.File.new_for_path(cabfile).replace("", False, 0, None), None, None, None
+        )
         if embed:
-            self.tables['_Streams'].add(os.path.basename(cabfile),
-                                        ('filepath', cabfile))
+            self.tables["_Streams"].add(
+                os.path.basename(cabfile), ("filepath", cabfile)
+            )
 
     def init_db(self, msifile):
         self.db = Libmsi.Database.new(msifile, Libmsi.DbFlags.CREATE, None)

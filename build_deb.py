@@ -20,7 +20,7 @@
 import os
 import sys
 
-sys.path.insert(0, 'src')
+sys.path.insert(0, "src")
 
 from utils import build, dist
 from utils.deb import DebBuilder
@@ -28,30 +28,32 @@ import wixpy
 import dependencies
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-scripts = ['scripts/py2/wix.py']
+scripts = ["scripts/py2/wix.py"]
 
-targets = [('_ubuntu_16.04', dist.UBUNTU16),
-           ('_ubuntu_18.04', dist.UBUNTU18),
-           ('_debian_9', dist.DEBIAN9)]
+targets = [
+    ("_ubuntu_16.04", dist.UBUNTU16),
+    ("_ubuntu_18.04", dist.UBUNTU18),
+    ("_debian_9", dist.DEBIAN9),
+]
 
-os.system('python setup.py build')
+os.system("python setup.py build")
 build.compile_sources()
 
 for dist, dist_key in targets:
-    deb_depends = ', '.join(dependencies.WIXPY_DEB_PY2[dist_key])
-    for arch in ('amd64', 'i386'):
+    deb_depends = ", ".join(dependencies.WIXPY_DEB_PY2[dist_key])
+    for arch in ("amd64", "i386"):
         DebBuilder(
             name=wixpy.PROJECT.lower(),
             version=wixpy.VERSION,
             dist=dist,
             arch=arch,
-            maintainer='%s <%s>' % (wixpy.AUTHOR, wixpy.AUTHOR_EMAIL),
+            maintainer="%s <%s>" % (wixpy.AUTHOR, wixpy.AUTHOR_EMAIL),
             depends=deb_depends,
             homepage=wixpy.URL,
             description=wixpy.DESCRIPTION,
             long_description=wixpy.LONG_DEB_DESCRIPTION,
-            section='devel',
-            package_dirs={'wixpy': 'src/wixpy'},
+            section="devel",
+            package_dirs={"wixpy": "src/wixpy"},
             scripts=scripts,
         )
 

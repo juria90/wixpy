@@ -31,39 +31,40 @@ def get_guid():
     return str(uuid.uuid4()).upper()
 
 
-def get_id(prefix=''):
-    return '%s%s' % (prefix, get_guid().replace('-', ''))
+def get_id(prefix=""):
+    return "%s%s" % (prefix, get_guid().replace("-", ""))
 
 
-STDOUT_ENDC = '\033[0m'
+STDOUT_ENDC = "\033[0m"
 
 
-def echo_msg(msg, newline=True, flush=True, code=''):
-    msg += '\n' if newline else ''
+def echo_msg(msg, newline=True, flush=True, code=""):
+    msg += "\n" if newline else ""
     msg = code + msg + STDOUT_ENDC if code else msg
     sys.stdout.write(msg)
     sys.stdout.flush() if flush else None
 
 
 def filetime_now():
-    return (int(time.time()) + 134774 * 86400) * 10 ** 7
+    return (int(time.time()) + 134774 * 86400) * 10**7
 
 
 def compute_md5(filepath):
-    with open(filepath, 'rb') as fp:
+    with open(filepath, "rb") as fp:
         hash = hashlib.md5(fp.read()).hexdigest()
-        data = bytes.fromhex(hash) if IS_PY3 else hash.decode('hex')
-    return struct.unpack('<iiii', data)
+        data = bytes.fromhex(hash) if IS_PY3 else hash.decode("hex")
+    return struct.unpack("<iiii", data)
 
 
 def encode_value(value):
-    if isinstance(value, unicode):
-        return value.encode('utf-8')
+    if isinstance(value, str):
+        return value.encode("utf-8")
     elif isinstance(value, list):
         return [encode_value(item) for item in value]
     elif isinstance(value, dict):
-        return {encode_value(key): encode_value(val)
-                for key, val in value.items()}
+        return {
+            encode_value(key): encode_value(val) for key, val in list(value.items())
+        }
     return value
 
 
@@ -71,7 +72,7 @@ def encode_json(data):
     return data if IS_PY3 else encode_value(data)
 
 
-XML_ENCODING = 'utf-8'
+XML_ENCODING = "utf-8"
 
 
 class XmlWriter(object):
@@ -82,7 +83,7 @@ class XmlWriter(object):
 
     def write(self, text):
         if IS_PY3:
-            text = text.encode(XML_ENCODING, errors='replace')
-        elif XML_ENCODING != 'utf-8':
-            text = text.decode('utf-8').encode(XML_ENCODING, errors='replace')
+            text = text.encode(XML_ENCODING, errors="replace")
+        elif XML_ENCODING != "utf-8":
+            text = text.decode("utf-8").encode(XML_ENCODING, errors="replace")
         self.fp.write(text)

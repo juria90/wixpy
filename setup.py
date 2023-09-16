@@ -23,18 +23,18 @@ import sys
 
 from distutils.core import setup
 
-sys.path.insert(1, os.path.abspath('./src'))
+sys.path.insert(1, os.path.abspath("./src"))
 
 import wixpy
 import dependencies
 
 IS_PY2 = sys.version_info.major < 3
-IS_MSW = os.name == 'nt'
-IS_WIN32 = IS_MSW and platform.architecture()[0] == '32bit'
-WIN_ARCH = 'win32' if IS_WIN32 else 'win64'
+IS_MSW = os.name == "nt"
+IS_WIN32 = IS_MSW and platform.architecture()[0] == "32bit"
+WIN_ARCH = "win32" if IS_WIN32 else "win64"
 
-scripts = ['scripts/py2/wix.py'] if IS_PY2 else ['scripts/py3/wix.py']
-scripts = ['scripts/%s/wix.py.exe' % WIN_ARCH] if IS_MSW and IS_PY2 else scripts
+scripts = ["scripts/py2/wix.py"] if IS_PY2 else ["scripts/py3/wix.py"]
+scripts = ["scripts/%s/wix.py.exe" % WIN_ARCH] if IS_MSW and IS_PY2 else scripts
 
 setup(
     name=wixpy.PROJECT,
@@ -49,10 +49,10 @@ setup(
     download_url=wixpy.DOWNLOAD_URL,
     long_description=wixpy.LONG_DESCRIPTION,
     classifiers=wixpy.CLASSIFIERS,
-    packages=['wixpy'],
-    package_dir={'wixpy': 'src/wixpy'},
+    packages=["wixpy"],
+    package_dir={"wixpy": "src/wixpy"},
     scripts=scripts,
 )
 
-if 'install' in sys.argv and not IS_MSW:
+if "install" in sys.argv and not IS_MSW:
     dependencies.install()

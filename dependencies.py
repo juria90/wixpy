@@ -23,60 +23,50 @@ import sys
 from utils.dist import *
 
 IS_PY2 = sys.version_info.major < 3
-IS_MSW = os.name == 'nt'
+IS_MSW = os.name == "nt"
 
 WIXPY_DEB_PY2 = {
-    UBUNTU16: ['python-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi0',
-               'gir1.2-libgcab-1.0'],
-    UBUNTU17: ['python-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi-1.0',
-               'gir1.2-gcab-1.0'],
-    UBUNTU18: ['python-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi-1.0',
-               'gir1.2-gcab-1.0'],
-    MINT18: ['python-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi0',
-             'gir1.2-libgcab-1.0'],
-    MINT19: ['python-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi-1.0',
-             'gir1.2-gcab-1.0'],
-    DEBIAN9: ['python-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi0',
-              'gir1.2-libgcab-1.0'],
+    UBUNTU16: ["python-gi", "gir1.2-glib-2.0", "gir1.2-libmsi0", "gir1.2-libgcab-1.0"],
+    UBUNTU17: ["python-gi", "gir1.2-glib-2.0", "gir1.2-libmsi-1.0", "gir1.2-gcab-1.0"],
+    UBUNTU18: ["python-gi", "gir1.2-glib-2.0", "gir1.2-libmsi-1.0", "gir1.2-gcab-1.0"],
+    MINT18: ["python-gi", "gir1.2-glib-2.0", "gir1.2-libmsi0", "gir1.2-libgcab-1.0"],
+    MINT19: ["python-gi", "gir1.2-glib-2.0", "gir1.2-libmsi-1.0", "gir1.2-gcab-1.0"],
+    DEBIAN9: ["python-gi", "gir1.2-glib-2.0", "gir1.2-libmsi0", "gir1.2-libgcab-1.0"],
 }
 
 WIXPY_DEB_PY3 = {
-    UBUNTU16: ['python3-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi0',
-               'gir1.2-libgcab-1.0'],
-    UBUNTU17: ['python3-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi-1.0',
-               'gir1.2-gcab-1.0'],
-    UBUNTU18: ['python3-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi-1.0',
-               'gir1.2-gcab-1.0'],
-    MINT18: ['python3-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi0',
-             'gir1.2-libgcab-1.0'],
-    MINT19: ['python3-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi-1.0',
-             'gir1.2-gcab-1.0'],
-    DEBIAN9: ['python3-gi', 'gir1.2-glib-2.0', 'gir1.2-libmsi0',
-              'gir1.2-libgcab-1.0'],
+    UBUNTU16: ["python3-gi", "gir1.2-glib-2.0", "gir1.2-libmsi0", "gir1.2-libgcab-1.0"],
+    UBUNTU17: ["python3-gi", "gir1.2-glib-2.0", "gir1.2-libmsi-1.0", "gir1.2-gcab-1.0"],
+    UBUNTU18: ["python3-gi", "gir1.2-glib-2.0", "gir1.2-libmsi-1.0", "gir1.2-gcab-1.0"],
+    MINT18: ["python3-gi", "gir1.2-glib-2.0", "gir1.2-libmsi0", "gir1.2-libgcab-1.0"],
+    MINT19: ["python3-gi", "gir1.2-glib-2.0", "gir1.2-libmsi-1.0", "gir1.2-gcab-1.0"],
+    DEBIAN9: ["python3-gi", "gir1.2-glib-2.0", "gir1.2-libmsi0", "gir1.2-libgcab-1.0"],
 }
 
 WIXPY_RPM_PY2 = {
-    FEDORA26: ['python-gobject-base', 'gobject-introspection', 'libmsi1',
-               'libgcab1'],
-    FEDORA27: ['python2-gobject-base', 'gobject-introspection', 'libmsi1',
-               'libgcab1'],
-    FEDORA28: ['python2-gobject-base', 'gobject-introspection', 'libmsi1',
-               'libgcab1'],
-    OPENSUSE15_0: ['python2-gobject', 'girepository-1_0',
-                   'typelib-1_0-Libmsi-1_0', 'typelib-1_0-GCab-1_0'],
+    FEDORA26: ["python-gobject-base", "gobject-introspection", "libmsi1", "libgcab1"],
+    FEDORA27: ["python2-gobject-base", "gobject-introspection", "libmsi1", "libgcab1"],
+    FEDORA28: ["python2-gobject-base", "gobject-introspection", "libmsi1", "libgcab1"],
+    OPENSUSE15_0: [
+        "python2-gobject",
+        "girepository-1_0",
+        "typelib-1_0-Libmsi-1_0",
+        "typelib-1_0-GCab-1_0",
+    ],
 }
 WIXPY_RPM_PY3 = {
-    FEDORA26: ['python3-gobject-base', 'gobject-introspection', 'libmsi1',
-               'libgcab1'],
-    FEDORA27: ['python3-gobject-base', 'gobject-introspection', 'libmsi1',
-               'libgcab1'],
-    FEDORA28: ['python3-gobject-base', 'gobject-introspection', 'libmsi1',
-               'libgcab1'],
-    OPENSUSE15_0: ['python3-gobject', 'girepository-1_0',
-                   'typelib-1_0-Libmsi-1_0', 'typelib-1_0-GCab-1_0'],
+    FEDORA26: ["python3-gobject-base", "gobject-introspection", "libmsi1", "libgcab1"],
+    FEDORA27: ["python3-gobject-base", "gobject-introspection", "libmsi1", "libgcab1"],
+    FEDORA28: ["python3-gobject-base", "gobject-introspection", "libmsi1", "libgcab1"],
+    OPENSUSE15_0: [
+        "python3-gobject",
+        "girepository-1_0",
+        "typelib-1_0-Libmsi-1_0",
+        "typelib-1_0-GCab-1_0",
+    ],
 }
 
-WARNING = '''
+WARNING = """
 
 WARNING!
 --------
@@ -86,7 +76,7 @@ May be they have different names in your system. Take a look at dependencies.py
 file for hints. Ubuntu =<14, LinuxMint =<17, Debian =<8, CentOS =<7,
 OpenSuse =<42.3 have no all the packages in the system repositories.
 
-'''
+"""
 
 
 def install():
@@ -94,15 +84,15 @@ def install():
     if not installed:
         if SYSFACTS.is_deb:
             deps_dict = WIXPY_DEB_PY2 if IS_PY2 else WIXPY_DEB_PY3
-            deps = ' '.join(deps_dict.get(SYSFACTS.sid, []))
+            deps = " ".join(deps_dict.get(SYSFACTS.sid, []))
             if deps:
-                os.system('sudo apt-get -y install %s' % deps)
+                os.system("sudo apt-get -y install %s" % deps)
                 installed = True
         elif SYSFACTS.is_rpm:
             deps_dict = WIXPY_RPM_PY2 if IS_PY2 else WIXPY_RPM_PY3
-            deps = ' '.join(deps_dict.get(SYSFACTS.sid, []))
+            deps = " ".join(deps_dict.get(SYSFACTS.sid, []))
             if deps:
-                os.system('yum -y install %s' % deps)
+                os.system("yum -y install %s" % deps)
                 installed = True
     if not installed:
         print(WARNING)
